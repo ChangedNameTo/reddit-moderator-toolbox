@@ -67,19 +67,6 @@ self.register_setting('kitteh', {
     'title': 'Kitteh?'
 });
 
-self.register_setting('subredditColor', {
-    'type': 'boolean',
-    'default': false,
-    'title': 'Add a left border to queue items with a color unique to the subreddit name.'
-});
-
-// A better way to use another module's settings.
-self.register_setting('subredditColorSalt', {
-    'type': 'text',
-    'default': TB.storage.getSetting('ModMail', 'subredditColorSalt', 'PJSalt'),
-    'hidden': true
-});
-
 
 self.init = function () {
     var $body = $('body');
@@ -90,9 +77,7 @@ self.init = function () {
         ignoreOnApprove = self.setting('ignoreOnApprove'),
         sortModQueue = self.setting('sortModqueue'),
         sortUnmoderated = self.setting('sortUnmoderated'),
-        linkToQueues = self.setting('linkToQueues'),
-        subredditColor = self.setting('subredditColor'),
-        subredditColorSalt = self.setting('subredditColorSalt');
+        linkToQueues = self.setting('linkToQueues');
 
     // var SPAM_REPORT_SUB = 'spam', QUEUE_URL = '';
     var QUEUE_URL = '';
@@ -513,19 +498,6 @@ self.init = function () {
 
         if (linkToQueues && QUEUE_URL) {
             $things.each(replaceSubLinks);
-        }
-
-        function colorSubreddits() {
-            var $this = $(this),
-                subredditName = TB.utils.cleanSubredditName($this.find('a.subreddit').text()),
-                colorForSub = TBUtils.stringToColor(subredditName + subredditColorSalt);
-
-            $this.attr('style', 'border-left: solid 3px ' + colorForSub + ' !important');
-            $this.addClass('tb-subreddit-color');
-        }
-
-        if (subredditColor) {
-            $things.each(colorSubreddits);
         }
 
         // NER support.
